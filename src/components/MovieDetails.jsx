@@ -244,7 +244,7 @@ const MovieDetails = () => {
             poster: omdbMovie.Poster,
             review: review,
             watchedOn: new Date(),
-            genres: omdbMovie.Genre,
+            genres: watchmodeMovie.genre_names,
             rating: userRating, // Assuming this is the user's personal rating
           },
         ];

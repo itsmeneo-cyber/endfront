@@ -91,7 +91,7 @@ const CombinedComponent = () => {
         }
       }
     };
-
+    
     fetchCounts();
   }, [currentUser, userId]);
 

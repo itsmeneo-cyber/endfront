@@ -35,14 +35,14 @@ const LatestMovies = () => {
   };
 
   if (loading) {
-    return <CircularProgress sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }} />;
+    return <CircularProgress sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", color: "#00ff15" }} />;
   }
 
   return (
-    <Box>
+    <Box sx={{ bgcolor: "#121212", minHeight: "100vh", padding: 2 }}>
       <IconButton
         onClick={handleBack}
-        sx={{ position: "fixed", top: 10, left: 10 }}
+        sx={{ position: "fixed", top: 10, left: 10, color: "#00ff15" }}
       >
         <ArrowBackIcon />
       </IconButton>
@@ -50,9 +50,7 @@ const LatestMovies = () => {
         display="grid"
         gridTemplateColumns={isSmallScreen ? "repeat(2, 1fr)" : "repeat(4, 1fr)"}
         gap={2}
-        padding={2}
         justifyContent="center"
-        backgroundColor="#000000"
       >
         {movies.map((movie) => (
           <Link
@@ -68,11 +66,12 @@ const LatestMovies = () => {
                 flexDirection: 'column',
                 justifyContent: 'space-between',
                 position: "relative",
+                backgroundColor: "#1e1e1e",
                 boxShadow: '0 0 15px #00ff15',
                 cursor: "pointer",
                 '&:hover': {
                   opacity: 0.9,
-                  transition:'all 0.5s ease-in-out',
+                  transition: 'all 0.5s ease-in-out',
                   transform: 'scale(1.05)',
                 },
               }}
@@ -91,7 +90,7 @@ const LatestMovies = () => {
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    bgcolor: 'grey.300',
+                    bgcolor: 'grey.900',
                     color: 'text.primary',
                   }}
                 >
@@ -101,16 +100,17 @@ const LatestMovies = () => {
               <Box
                 sx={{
                   padding: 1,
-                  backgroundColor: 'background.paper',
+                  backgroundColor: '#1e1e1e',
                   display: 'flex',
                   flexDirection: 'column',
+                  color: '#00ff15'
                 }}
               >
-                <Typography variant="subtitle1" sx={{ display: "flex", alignItems: "center", mb: 1, fontWeight: "bold", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  <MovieIcon sx={{ marginRight: 1, color: "red" }} /> {movie.title}
+                <Typography variant="subtitle1" sx={{ display: "flex", alignItems: "center", mb: 1, fontWeight: "bold", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "#00ff15" }}>
+                  <MovieIcon sx={{ marginRight: 1, color: "#ff1744" }} /> Movie Name: {movie.title}
                 </Typography>
-                <Typography variant="body2" sx={{ display: "flex", alignItems: "center", fontWeight: "bold" }}>
-                  <CalendarTodayIcon sx={{ marginRight: 1, color: "orange" }} /> {new Date(movie.source_release_date).toDateString()}
+                <Typography variant="body2" sx={{ display: "flex", alignItems: "center", fontWeight: "bold", color: "#ff9100" }}>
+                  <CalendarTodayIcon sx={{ marginRight: 1, color: "#ff9100" }} /> Release Date: {new Date(movie.source_release_date).toDateString()}
                 </Typography>
               </Box>
             </Card>
