@@ -99,7 +99,6 @@ const Listofallshowswatched = () => {
                   sx={{
                     display: 'flex',
                     alignItems: 'center',
-                    height: '150px',
                     width: '100%',
                     backgroundColor: "#fff",
                     borderRadius: 4,

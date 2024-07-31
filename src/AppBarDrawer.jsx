@@ -93,6 +93,9 @@ const ClearIconWrapper = styled(IconButton)(({ theme }) => ({
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   width: "100%",
+  border: "3px solid #00ff00", // Neon border color
+  borderRadius: theme.shape.borderRadius,
+  boxShadow: `0 0 10px rgba(0, 255, 0, 0.8)`, // Neon glow effect
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
     paddingLeft: theme.spacing(2),
@@ -235,11 +238,17 @@ const AppBarDrawer = ({ children }) => {
             key={index}
             onClick={() => handleListItemClick(item.link)}
           >
-            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemIcon sx={{ paddingBottom: "20px" }}>
+  {item.icon}
+</ListItemIcon>
             <ListItemText
               primary={item.text}
               primaryTypographyProps={{
-                sx: { color: "#fff", fontStyle: "italic" },
+                sx: {
+                  color: "#fff",
+                  fontStyle: "italic",
+                  paddingBottom: "20px",
+                },
               }}
             />
           </HoverableListItem>
@@ -270,17 +279,21 @@ const AppBarDrawer = ({ children }) => {
               <MenuIcon />
             </IconButton>
             <Typography
-              variant="h6"
-              noWrap
-              component="div"
-              sx={{
-                display: { xs: "none", sm: "block" },
-                fontStyle: "italic",
-                marginRight: "15px", // Adjust the space from the right as needed
-              }}
-            >
-              CineConnect
-            </Typography>
+  variant="h6"
+  noWrap
+  component="div"
+  sx={{
+    display: { xs: "none", sm: "block" },
+    fontStyle: "italic",
+    marginRight: "15px", // Adjust the space from the right as needed
+    background: "linear-gradient(to right, #BDC3C7, #2C3E)",
+           WebkitBackgroundClip: "text", // Apply gradient to text
+    color: "transparent", // Make text color transparent to show gradient
+    fontWeight: "bold", // Optional: Make text bold for a more pronounced effect
+  }}
+>
+  CineConnect
+</Typography>
 
             <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
               <Search>
