@@ -56,7 +56,7 @@ import {
   ArrowBack as ArrowBackIcon,
   MovieFilter as MovieFilterIcon,
   Add as AddIcon,
-} from "@mui/icons-material"; 
+} from "@mui/icons-material";
 import { keyframes } from "@mui/system";
 import { MovieFilter } from "@mui/icons-material";
 
@@ -96,6 +96,7 @@ const renderIcon = (label) => {
 };
 
 const MovieDetails = () => {
+  const navigate = useNavigate();
   const { imdbID } = useParams();
   const [watchmodeMovie, setWatchmodeMovie] = useState(null); // State for Watchmode data
   const [omdbMovie, setOmdbMovie] = useState(null); // State for OMDB data
@@ -129,9 +130,12 @@ const MovieDetails = () => {
     const fetchMovieData = async () => {
       setIsLoading(true);
       try {
-        const res = await fetch(`${API_URL}/api/movie-details?imdbID=${imdbID}`, {
-          signal: controller.signal,
-        });
+        const res = await fetch(
+          `${API_URL}/api/movie-details?imdbID=${imdbID}`,
+          {
+            signal: controller.signal,
+          }
+        );
 
         if (!res.ok) {
           throw new Error("Network response was not ok");
@@ -217,27 +221,29 @@ const MovieDetails = () => {
   };
 
   const handleBack = () => {
-    window.history.back();
+    navigate(-1);
   };
 
   const handleConfirmAddToWatched = async () => {
     setReviewDialogOpen(false);
-  
+
     if (currentUser) {
       const userDocRef = doc(db, "users", currentUser.uid);
       const userDocSnap = await getDoc(userDocRef);
-  
+
       if (userDocSnap.exists()) {
         const userData = userDocSnap.data();
         const watchedList =
           typeToAdd === "movie"
             ? userData.WatchedMovies
             : userData.WatchedShows;
-  
-        const currentReviewCount = Number.isFinite(userData.reviewCount) ? userData.reviewCount : 0;
-  
+
+        const currentReviewCount = Number.isFinite(userData.reviewCount)
+          ? userData.reviewCount
+          : 0;
+
         const updatedWatchedList = [
-          ...watchedList.filter(item => item.imdbID !== imdbID), // Remove the existing entry if it exists
+          ...watchedList.filter((item) => item.imdbID !== imdbID), // Remove the existing entry if it exists
           {
             imdbID,
             title: omdbMovie.Title,
@@ -247,21 +253,20 @@ const MovieDetails = () => {
             review: review,
             watchedOn: new Date(),
             genres: watchmodeMovie.genre_names,
-            rating: userRating, 
+            rating: userRating,
           },
         ];
-  
-    
+
         await setDoc(
           userDocRef,
           {
             [typeToAdd === "movie" ? "WatchedMovies" : "WatchedShows"]:
               updatedWatchedList,
-            reviewCount: currentReviewCount + 1, 
+            reviewCount: currentReviewCount + 1,
           },
           { merge: true }
         );
-  
+
         if (typeToAdd === "movie") {
           setIsInWatchListMovies(true);
           setIsInWatchListShows(false);
@@ -274,58 +279,59 @@ const MovieDetails = () => {
       alert("Please sign in to add to watched list.");
     }
   };
-  
 
   const handleRemoveFromWatched = async (type) => {
     if (currentUser) {
       const userDocRef = doc(db, "users", currentUser.uid);
       const userDocSnap = await getDoc(userDocRef);
-  
+
       if (userDocSnap.exists()) {
         const userData = userDocSnap.data();
         const watchedList =
           type === "movie" ? userData.WatchedMovies : userData.WatchedShows;
-  
+
         const updatedWatchedList = watchedList.filter(
           (item) => item.imdbID !== imdbID
         );
-  
-        
-        const currentReviewCount = Number.isFinite(userData.reviewCount) ? userData.reviewCount : 0;
-  
+
+        const currentReviewCount = Number.isFinite(userData.reviewCount)
+          ? userData.reviewCount
+          : 0;
+
         await setDoc(
           userDocRef,
           {
             [type === "movie" ? "WatchedMovies" : "WatchedShows"]:
               updatedWatchedList,
-            reviewCount: Math.max(currentReviewCount - 1, 0), 
+            reviewCount: Math.max(currentReviewCount - 1, 0),
           },
           { merge: true }
         );
-  
+
         if (type === "movie") {
           setIsInWatchListMovies(false);
         } else {
           setIsInWatchListShows(false);
         }
-  
+
         setUserRating(0);
         alert(
-          `Movie removed from watched ${type === "movie" ? "movies" : "shows"} list!`
+          `Movie removed from watched ${
+            type === "movie" ? "movies" : "shows"
+          } list!`
         );
       }
     }
   };
-  
+
   const handleRatingChange = async (event, newValue) => {
     setUserRating(newValue);
-
   };
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       setPosterLoading(false);
-    }, 2000); 
+    }, 2000);
 
     return () => clearTimeout(timeout);
   }, []);
@@ -338,7 +344,7 @@ const MovieDetails = () => {
       return acc;
     }, []);
 
-    return uniquePlatforms.slice(0, 4); 
+    return uniquePlatforms.slice(0, 4);
   };
 
   const getPlatformIcon = (name) => {
@@ -391,38 +397,26 @@ const MovieDetails = () => {
             style={{ width: 24, height: 24 }}
           />
         );
-        case "binge":
-          return (
-            <img
-              src="/binge.png"
-              alt="Binge"
-              style={{ width: 24, height: 24 }}
-            />
-          );
-          case "crave":
-            return (
-              <img
-                src="/crave.png"
-                alt="Crave"
-                style={{ width: 24, height: 24 }}
-              />
-            );
-            case "apple":
-              return (
-                <img
-                  src="/apple.png"
-                  alt="Apple"
-                  style={{ width: 24, height: 24 }}
-                />
-              );
-              case "youtube":
-                return (
-                  <img
-                    src="/youtube.png"
-                    alt="Apple"
-                    style={{ width: 24, height: 24 }}
-                  />
-                );
+      case "binge":
+        return (
+          <img src="/binge.png" alt="Binge" style={{ width: 24, height: 24 }} />
+        );
+      case "crave":
+        return (
+          <img src="/crave.png" alt="Crave" style={{ width: 24, height: 24 }} />
+        );
+      case "apple":
+        return (
+          <img src="/apple.png" alt="Apple" style={{ width: 24, height: 24 }} />
+        );
+      case "youtube":
+        return (
+          <img
+            src="/youtube.png"
+            alt="Apple"
+            style={{ width: 24, height: 24 }}
+          />
+        );
       default:
         return <MovieFilter />; // Default icon for unknown platforms
     }
@@ -442,8 +436,7 @@ const MovieDetails = () => {
   return (
     <Box
       pl={isSmallScreen ? 0 : 10}
-      pr={isSmallScreen ? 0 : 10} 
-    
+      pr={isSmallScreen ? 0 : 10}
       bgcolor="#000000"
       borderRadius={0}
       boxShadow={0}
@@ -457,7 +450,7 @@ const MovieDetails = () => {
             color: "#00000",
             zIndex: (theme) => theme.zIndex.drawer + 10,
             marginLeft: isSmallScreen ? "0" : "220px",
-        
+
             marginTop: isSmallScreen ? "56px" : "64px",
           }}
           open={true}
@@ -496,7 +489,7 @@ const MovieDetails = () => {
         <Box key={11}>
           <Box display="flex" key={12}>
             <IconButton
-              onClick={() => window.history.back()}
+              onClick={handleBack}
               edge="start"
               color="inherit"
               aria-label="back"
@@ -581,12 +574,12 @@ const MovieDetails = () => {
                         max={10}
                         size="small"
                         sx={{
-                          marginLeft: 0, 
+                          marginLeft: 0,
                           "& .MuiRating-icon": {
-                            width: "14px", 
-                            height: "14px", 
-                            marginRight: "0px", 
-                            color: "#ffffff", 
+                            width: "14px",
+                            height: "14px",
+                            marginRight: "0px",
+                            color: "#ffffff",
                           },
                         }}
                       />
@@ -594,56 +587,60 @@ const MovieDetails = () => {
                   )}
                 </Box>
                 {isInWatchListMovies ? (
-                 <Button
-                 variant="contained"
-                 color="error"
-                 startIcon={<RemoveCircleOutlineIcon />}
-                 onClick={() => handleRemoveFromWatched("movie")}
-                 sx={{
-                   marginLeft: 0,
-                   fontSize: isSmallScreen ? "0.75rem" : "0.875rem",
-                   padding: isSmallScreen ? "4px 8px" : "8px 16px", 
-                   borderRadius: "4px", 
-                   backgroundColor: isSmallScreen ? "#e57373" : "#f44336", 
-                   color: "#ffffff", // White text for contrast
-                   border: isSmallScreen ? "1px solid #e57373" : "1px solid #f44336", 
-                   "&:hover": {
-                     backgroundColor: isSmallScreen ? "#ef5350" : "#d32f2f", 
-                     borderColor: isSmallScreen ? "#ef5350" : "#d32f2f",
-                   },
-                   "&:active": {
-                     backgroundColor: isSmallScreen ? "#c62828" : "#c62828", 
-                     borderColor: isSmallScreen ? "#c62828" : "#c62828",
-                   },
-                 }}
-               >
-                 Remove
-               </Button>
+                  <Button
+                    variant="contained"
+                    color="error"
+                    startIcon={<RemoveCircleOutlineIcon />}
+                    onClick={() => handleRemoveFromWatched("movie")}
+                    sx={{
+                      marginLeft: 0,
+                      fontSize: isSmallScreen ? "0.75rem" : "0.875rem",
+                      padding: isSmallScreen ? "4px 8px" : "8px 16px",
+                      borderRadius: "4px",
+                      backgroundColor: isSmallScreen ? "#e57373" : "#f44336",
+                      color: "#ffffff", // White text for contrast
+                      border: isSmallScreen
+                        ? "1px solid #e57373"
+                        : "1px solid #f44336",
+                      "&:hover": {
+                        backgroundColor: isSmallScreen ? "#ef5350" : "#d32f2f",
+                        borderColor: isSmallScreen ? "#ef5350" : "#d32f2f",
+                      },
+                      "&:active": {
+                        backgroundColor: isSmallScreen ? "#c62828" : "#c62828",
+                        borderColor: isSmallScreen ? "#c62828" : "#c62828",
+                      },
+                    }}
+                  >
+                    Remove
+                  </Button>
                 ) : isInWatchListShows ? (
                   <Button
-                  variant="contained"
-                  color="error"
-                  startIcon={<RemoveCircleOutlineIcon />}
-                  onClick={() => handleRemoveFromWatched("show")}
-                  sx={{
-                    marginLeft: 0,
-                    fontSize: isSmallScreen ? "0.75rem" : "0.875rem",
-                    padding: isSmallScreen ? "4px 8px" : "8px 16px", 
-                    borderRadius: "4px", 
-                    backgroundColor: isSmallScreen ? "#e57373" : "#f44336", 
-                    color: "#ffffff", // White text for contrast
-                    border: isSmallScreen ? "1px solid #e57373" : "1px solid #f44336", 
-                    "&:hover": {
-                      backgroundColor: isSmallScreen ? "#ef5350" : "#d32f2f", 
-                    },
-                    "&:active": {
-                      backgroundColor: isSmallScreen ? "#c62828" : "#c62828",
-                      borderColor: isSmallScreen ? "#c62828" : "#c62828",
-                    },
-                  }}
-                >
-                  Remove
-                </Button>
+                    variant="contained"
+                    color="error"
+                    startIcon={<RemoveCircleOutlineIcon />}
+                    onClick={() => handleRemoveFromWatched("show")}
+                    sx={{
+                      marginLeft: 0,
+                      fontSize: isSmallScreen ? "0.75rem" : "0.875rem",
+                      padding: isSmallScreen ? "4px 8px" : "8px 16px",
+                      borderRadius: "4px",
+                      backgroundColor: isSmallScreen ? "#e57373" : "#f44336",
+                      color: "#ffffff", // White text for contrast
+                      border: isSmallScreen
+                        ? "1px solid #e57373"
+                        : "1px solid #f44336",
+                      "&:hover": {
+                        backgroundColor: isSmallScreen ? "#ef5350" : "#d32f2f",
+                      },
+                      "&:active": {
+                        backgroundColor: isSmallScreen ? "#c62828" : "#c62828",
+                        borderColor: isSmallScreen ? "#c62828" : "#c62828",
+                      },
+                    }}
+                  >
+                    Remove
+                  </Button>
                 ) : (
                   <>
                     <Box>
@@ -673,7 +670,7 @@ const MovieDetails = () => {
                           onClick={() => handleAddToWatched("movie")}
                           sx={{
                             fontSize: "0.75rem",
-                            color: "#000", 
+                            color: "#000",
                             backgroundColor: "#fff",
                             "&:hover": {
                               backgroundColor: "#444",
@@ -686,7 +683,7 @@ const MovieDetails = () => {
                           onClick={() => handleAddToWatched("show")}
                           sx={{
                             color: "#000",
-                            fontSize: "0.75rem", 
+                            fontSize: "0.75rem",
                             backgroundColor: "#fff",
                             "&:hover": {
                               backgroundColor: "#444",
@@ -707,24 +704,24 @@ const MovieDetails = () => {
                   margin: 0,
                   borderRadius: 1,
                   boxShadow: 1,
-                  backgroundColor: "#000000", 
-                  width: "100%", 
+                  backgroundColor: "#000000",
+                  width: "100%",
                   display: "flex",
                   alignItems: "center",
                   marginBottom: 1,
                 }}
               >
                 <Typography
-                  variant="h5" 
+                  variant="h5"
                   color="white"
                   sx={{
                     fontWeight: "500",
-                    overflow: "hidden", 
-                    textOverflow: "ellipsis", 
-                    whiteSpace: "normal", 
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    whiteSpace: "normal",
                     lineHeight: 1.4,
-                    wordBreak: "break-word", 
-                    width: "100%", 
+                    wordBreak: "break-word",
+                    width: "100%",
                   }}
                 >
                   {omdbMovie?.Title || "Untitled"}
@@ -745,9 +742,9 @@ const MovieDetails = () => {
                       variant="outlined"
                       size="medium"
                       sx={{
-                        backgroundColor: "#333333", 
-                        color: "#ffffff", 
-                        border: "1px solid #444444", 
+                        backgroundColor: "#333333",
+                        color: "#ffffff",
+                        border: "1px solid #444444",
                         marginRight: 1,
                         marginBottom: isSmallScreen ? 1 : 2,
                       }}
@@ -762,15 +759,14 @@ const MovieDetails = () => {
                 flexWrap="wrap"
                 alignItems="center"
               >
-         
                 <Chip
                   label={`Year: ${omdbMovie?.Year || "N/A"}`}
                   variant="outlined"
                   size="medium"
                   sx={{
-                    backgroundColor: "#333333", 
-                    color: "#ffffff", 
-                    border: "1px solid #444444", 
+                    backgroundColor: "#333333",
+                    color: "#ffffff",
+                    border: "1px solid #444444",
                     marginRight: 2,
                     marginBottom: isSmallScreen ? 1 : 0,
                   }}
@@ -787,7 +783,7 @@ const MovieDetails = () => {
                     color: "#ffffff",
                     marginRight: 1,
                     marginBottom: isSmallScreen ? 1 : 0,
-                    border: "1px solid #444444", 
+                    border: "1px solid #444444",
                   }}
                 />
               </Box>
@@ -806,15 +802,15 @@ const MovieDetails = () => {
                       case "rotten tomatoes":
                       case "rottentomatoes":
                         color = "#fff";
-                        icon = "/rottentomato.png"; 
+                        icon = "/rottentomato.png";
                         break;
                       case "metacritic":
                         color = "#fff";
-                        icon = "/metacritic.png"; 
+                        icon = "/metacritic.png";
                         break;
                       default:
                         color = "tomato";
-                        icon = "https://example.com/default-icon.png"; 
+                        icon = "https://example.com/default-icon.png";
                     }
 
                     return (
@@ -833,8 +829,8 @@ const MovieDetails = () => {
                             height: 20,
                             marginLeft: 4,
                             marginRight: 12,
-                            borderRadius: "50%", 
-                            objectFit: "cover", 
+                            borderRadius: "50%",
+                            objectFit: "cover",
                           }}
                         />
                         <Typography
@@ -876,13 +872,13 @@ const MovieDetails = () => {
             }}
           >
             <Typography
-              variant="h4" 
-              color="white" 
+              variant="h4"
+              color="white"
               sx={{
                 textAlign: "left",
-                lineHeight: 1.5, 
+                lineHeight: 1.5,
                 fontWeight: "bold",
-                mb: 1, 
+                mb: 1,
               }}
             >
               Plot:
@@ -891,9 +887,9 @@ const MovieDetails = () => {
               variant="body1"
               color="white"
               sx={{
-                fontSize: "1rem", 
+                fontSize: "1rem",
                 lineHeight: 1.4,
-                fontWeight: "100", 
+                fontWeight: "100",
                 textAlign: "justify",
                 color: "#e5e5e5",
               }}
@@ -915,7 +911,7 @@ const MovieDetails = () => {
               color="white"
               sx={{
                 fontWeight: "bold",
-                mb: 1, 
+                mb: 1,
                 textAlign: "left",
               }}
             >
@@ -929,13 +925,11 @@ const MovieDetails = () => {
                 fontSize: "1rem",
                 lineHeight: 1.4,
                 fontWeight: "100",
-                textAlign: "left", 
-                mb: 1, 
+                textAlign: "left",
+                mb: 1,
               }}
             >
-              <span style={{  color: "#e5e5e5" }}>
-                Director:
-              </span>{" "}
+              <span style={{ color: "#e5e5e5" }}>Director:</span>{" "}
               {omdbMovie?.Director || "N/A"}
             </Typography>
 
@@ -950,9 +944,7 @@ const MovieDetails = () => {
                 mb: 1, // Margin bottom for spacing
               }}
             >
-              <span style={{  color: "#e5e5e5" }}>
-                Writer:
-              </span>{" "}
+              <span style={{ color: "#e5e5e5" }}>Writer:</span>{" "}
               {omdbMovie?.Writer || "N/A"}
             </Typography>
 
@@ -967,9 +959,7 @@ const MovieDetails = () => {
                 mb: 1, // Margin bottom for spacing
               }}
             >
-              <span style={{  color: "#e5e5e5" }}>
-                Actors:
-              </span>{" "}
+              <span style={{ color: "#e5e5e5" }}>Actors:</span>{" "}
               {omdbMovie?.Actors || "N/A"}
             </Typography>
           </Box>
@@ -980,7 +970,6 @@ const MovieDetails = () => {
               padding: 2,
               borderRadius: 1,
               boxShadow: 1,
-             
             }}
           >
             <Typography
@@ -1022,13 +1011,13 @@ const MovieDetails = () => {
                     mb={2}
                   >
                     <Typography
-                      variant={isSmallScreen ? "h4" : "h6"} 
+                      variant={isSmallScreen ? "h4" : "h6"}
                       sx={{
                         marginBottom: 1,
-                        marginLeft:3,
+                        marginLeft: 3,
                         color: "#22cfff",
                         fontWeight: "bold",
-                        animation: `${scaleAnimation} 3s infinite`, 
+                        animation: `${scaleAnimation} 3s infinite`,
                       }}
                     >
                       Streaming Platforms
@@ -1047,17 +1036,17 @@ const MovieDetails = () => {
                             key={index}
                             label={source.name}
                             variant="outlined"
-                            size={isSmallScreen ? "small" : "medium"} 
+                            size={isSmallScreen ? "small" : "medium"}
                             icon={getPlatformIcon(source.name)}
                             sx={{
                               cursor: "pointer",
                               margin: 1,
-                             
+
                               animation: `${scaleAnimation} 3s infinite`,
-                          
+
                               fontSize: isSmallScreen ? "0.8rem" : "1rem",
                               padding: isSmallScreen ? "4px 8px" : "8px 16px",
-                             
+
                               color: "#e5e5e5",
                               backgroundColor: "#121212",
                             }}
