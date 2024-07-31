@@ -99,7 +99,7 @@ const SearchMovie = () => {
       }}
     >
       <Typography
-        variant="h6"
+        variant="body1"
         gutterBottom
         sx={{
           color: "#fcbf49",
@@ -111,7 +111,7 @@ const SearchMovie = () => {
           letterSpacing: "2px",
         }}
       >
-        Search Results for {query}
+        Results for {query}
       </Typography>
       {isLoading && (
         <Backdrop

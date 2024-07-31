@@ -8,31 +8,24 @@ import {
   ListItem,
   ListItemAvatar,
   ListItemText,
-  Typography,
-  Tab,
   Tabs,
+  Tab,
 } from "@mui/material";
 import { db } from "../firebase/FirebaseConfig";
-import { collection, doc, getDoc, updateDoc, arrayRemove, arrayUnion,setDoc,serverTimestamp } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  updateDoc,
+  arrayRemove,
+  arrayUnion,
+} from "firebase/firestore";
 import { useAuth } from "../contexts/AuthContext";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import PersonRemoveIcon from "@mui/icons-material/PersonRemove";
 import CloseIcon from "@mui/icons-material/Close";
 
 const FriendRequests = () => {
-
-
-
-
-
-
-
-
-
   const { currentUser: alpha } = useAuth();
-
-
-  
   const [friendRequestsReceived, setFriendRequestsReceived] = useState([]);
   const [friendRequestsSent, setFriendRequestsSent] = useState([]);
   const [tabValue, setTabValue] = useState(0);
@@ -63,35 +56,41 @@ const FriendRequests = () => {
 
   const handleAcceptRequest = async (uid) => {
     setLoading(true);
+
     try {
       const chatRoomId = [alpha.uid, uid].sort().join("_");
+      const betaDoc = await getDoc(doc(db, "users", uid));
+      if (betaDoc.exists()) {
+        const betaData = betaDoc.data();
 
-      // Add the sender to current user's friends list
-      await updateDoc(doc(db, "users", alpha.uid), {
-        friends: arrayUnion({
-          uid: uid,
-          chatRoomId: chatRoomId,
-          notificationCount: 0,
-        }),
-        friendRequestsReceived: arrayRemove(uid),
-      });
+        // Add the sender to the current user's friends list
+        await updateDoc(doc(db, "users", alpha.uid), {
+          friends: arrayUnion({
+            uid: uid,
+            displayName: betaData.displayName,
+            photoURL: betaData.photoURL || "",
+            chatRoomId: chatRoomId,
+            notificationCount: 0,
+            lastMessageReceivedTime: new Date(),
+          }),
+          friendRequestsReceived: arrayRemove(uid),
+        });
 
-      // Add current user to sender's friends list
-      await updateDoc(doc(db, "users", uid), {
-        friends: arrayUnion({
-          uid: alpha.uid,
-          chatRoomId: chatRoomId,
-          notificationCount: 0,
-        }),
-        friendRequestsSent: arrayRemove(alpha.uid),
-      });
+        // Add the current user to the sender's friends list
+        await updateDoc(doc(db, "users", uid), {
+          friends: arrayUnion({
+            uid: alpha.uid,
+            displayName: alpha.displayName,
+            photoURL: alpha.photoURL || "",
+            chatRoomId: chatRoomId,
+            notificationCount: 0,
+            lastMessageReceivedTime: new Date(),
+          }),
+          friendRequestsSent: arrayRemove(alpha.uid),
+        });
 
-      // Update state to reflect changes
-      const chatRoomRef = doc(db, "chats", chatRoomId);
-      await setDoc(chatRoomRef, {
-        lastMessageReceived: serverTimestamp(),
-      }, { merge: true });
-      setFriendRequestsReceived((prev) => prev.filter((id) => id !== uid));
+        setFriendRequestsReceived((prev) => prev.filter((id) => id !== uid));
+      }
     } catch (error) {
       console.error("Error accepting friend request:", error);
     } finally {
@@ -106,7 +105,9 @@ const FriendRequests = () => {
       await updateDoc(doc(db, "users", alpha.uid), {
         friendRequestsReceived: arrayRemove(uid),
       });
-
+      await updateDoc(doc(db, "users", uid), {
+        friendRequestsSent: arrayRemove(alpha.uid),
+      });
       // Update state to reflect changes
       setFriendRequestsReceived((prev) => prev.filter((id) => id !== uid));
     } catch (error) {
@@ -161,7 +162,7 @@ const FriendRequests = () => {
             onAccept={handleAcceptRequest}
             onDecline={handleDeclineRequest}
             onCancel={handleCancelRequest}
-            fetchUserInfo={fetchUserInfo} // Pass fetchUserInfo as a prop
+            fetchUserInfo={fetchUserInfo}
           />
         ))}
       </List>

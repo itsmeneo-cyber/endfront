@@ -91,7 +91,7 @@ const CombinedComponent = () => {
         }
       }
     };
-    
+
     fetchCounts();
   }, [currentUser, userId]);
 
@@ -160,7 +160,7 @@ const CombinedComponent = () => {
             backgroundColor: "#6a4c93",
             color: "white",
             marginTop: 2,
-            fontSize: isMobile ? "0.70rem" : "0.8rem",
+            fontSize: isMobile ? "0.50rem" : "0.8rem",
             textTransform: "none",
           }}
           onClick={handleMoviesExploreAll}
@@ -226,9 +226,7 @@ const CombinedComponent = () => {
               ? "No Data"
               : chartLabels[maxCountIndex]
           }
-          colour={
-            chartBackgroundColors[maxCountIndex]
-          }
+          colour={chartBackgroundColors[maxCountIndex]}
         />
 
         <Box
@@ -247,15 +245,21 @@ const CombinedComponent = () => {
               textAlign="center"
             >
               <Box
-                sx={{
+                 sx={{
                   backgroundColor: chartBackgroundColors[index],
                   borderRadius: "50%",
-                  width: 15,
-                  height: 15,
+                  width: isSmallScreen ? "10px" : "15px",
+                  height: isSmallScreen ? "10px" : "15px",
                   marginBottom: 1,
                 }}
               />
-              <Typography variant="body2" color="#3c3c3c">
+              <Typography
+                variant="body2"
+                color="#3c3c3c"
+                sx={{
+                  fontSize: isSmallScreen ? "10px" : "14px",
+                }}
+              >
                 {label}
               </Typography>
             </Box>

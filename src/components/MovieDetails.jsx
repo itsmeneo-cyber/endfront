@@ -224,18 +224,24 @@ const MovieDetails = () => {
 
   const handleConfirmAddToWatched = async () => {
     setReviewDialogOpen(false);
+  
     if (currentUser) {
       const userDocRef = doc(db, "users", currentUser.uid);
       const userDocSnap = await getDoc(userDocRef);
-
+  
       if (userDocSnap.exists()) {
         const userData = userDocSnap.data();
         const watchedList =
           typeToAdd === "movie"
             ? userData.WatchedMovies
             : userData.WatchedShows;
+  
+        // Ensure reviewCount is a valid number, defaulting to 0 if it's undefined or invalid
+        const currentReviewCount = Number.isFinite(userData.reviewCount) ? userData.reviewCount : 0;
+  
+        // Create the updated watched list with the new review
         const updatedWatchedList = [
-          ...watchedList,
+          ...watchedList.filter(item => item.imdbID !== imdbID), // Remove the existing entry if it exists
           {
             imdbID,
             title: omdbMovie.Title,
@@ -248,16 +254,18 @@ const MovieDetails = () => {
             rating: userRating, // Assuming this is the user's personal rating
           },
         ];
-
+  
+        // Update the user's document
         await setDoc(
           userDocRef,
           {
             [typeToAdd === "movie" ? "WatchedMovies" : "WatchedShows"]:
               updatedWatchedList,
+            reviewCount: currentReviewCount + 1, // Safely increment the reviewCount
           },
           { merge: true }
         );
-
+  
         if (typeToAdd === "movie") {
           setIsInWatchListMovies(true);
           setIsInWatchListShows(false);
@@ -270,46 +278,50 @@ const MovieDetails = () => {
       alert("Please sign in to add to watched list.");
     }
   };
+  
 
   const handleRemoveFromWatched = async (type) => {
     if (currentUser) {
       const userDocRef = doc(db, "users", currentUser.uid);
       const userDocSnap = await getDoc(userDocRef);
-
+  
       if (userDocSnap.exists()) {
         const userData = userDocSnap.data();
         const watchedList =
           type === "movie" ? userData.WatchedMovies : userData.WatchedShows;
-
+  
         const updatedWatchedList = watchedList.filter(
           (item) => item.imdbID !== imdbID
         );
-
+  
+        // Ensure reviewCount is a valid number, defaulting to 0 if it's undefined or invalid
+        const currentReviewCount = Number.isFinite(userData.reviewCount) ? userData.reviewCount : 0;
+  
+        // Update the user's document
         await setDoc(
           userDocRef,
           {
             [type === "movie" ? "WatchedMovies" : "WatchedShows"]:
               updatedWatchedList,
+            reviewCount: Math.max(currentReviewCount - 1, 0), // Safely decrement reviewCount, ensuring it doesn't go below 0
           },
           { merge: true }
         );
-
+  
         if (type === "movie") {
           setIsInWatchListMovies(false);
         } else {
           setIsInWatchListShows(false);
         }
-
+  
         setUserRating(0);
         alert(
-          `Movie removed from watched ${
-            type === "movie" ? "movies" : "shows"
-          } list!`
+          `Movie removed from watched ${type === "movie" ? "movies" : "shows"} list!`
         );
       }
     }
   };
-
+  
   const handleRatingChange = async (event, newValue) => {
     setUserRating(newValue);
     // if (currentUser) {
@@ -458,7 +470,7 @@ const MovieDetails = () => {
           }}
           open={true}
         >
-          <HashLoader color="#ffafcc" size={80} />
+          <HashLoader color="#ffff32" size={80} />
         </Backdrop>
       )}
       <Dialog
@@ -590,57 +602,57 @@ const MovieDetails = () => {
                   )}
                 </Box>
                 {isInWatchListMovies ? (
-                  <Button
-                    variant="contained"
-                    color="error"
-                    startIcon={<RemoveCircleOutlineIcon />}
-                    onClick={() => handleRemoveFromWatched("movie")}
-                    sx={{
-                      marginLeft: 0,
-                      fontSize: "0.875rem", // Increase font size for better readability
-                      padding: "8px 16px", // Add padding for a better touch target
-                      borderRadius: "4px", // Rounded corners
-                      backgroundColor: "#f44336", // A bold red color for visibility
-                      color: "#ffffff", // White text for contrast
-                      border: "1px solid #f44336", // Matching border color
-                      "&:hover": {
-                        backgroundColor: "#d32f2f", // Darker red for hover state
-                        borderColor: "#d32f2f",
-                      },
-                      "&:active": {
-                        backgroundColor: "#c62828", // Even darker red for active state
-                        borderColor: "#c62828",
-                      },
-                    }}
-                  >
-                    Remove
-                  </Button>
+                 <Button
+                 variant="contained"
+                 color="error"
+                 startIcon={<RemoveCircleOutlineIcon />}
+                 onClick={() => handleRemoveFromWatched("movie")}
+                 sx={{
+                   marginLeft: 0,
+                   fontSize: isSmallScreen ? "0.75rem" : "0.875rem", // Decrease font size on small screens
+                   padding: isSmallScreen ? "4px 8px" : "8px 16px", // Decrease padding on small screens
+                   borderRadius: "4px", // Rounded corners
+                   backgroundColor: isSmallScreen ? "#e57373" : "#f44336", // Change color on small screens
+                   color: "#ffffff", // White text for contrast
+                   border: isSmallScreen ? "1px solid #e57373" : "1px solid #f44336", // Matching border color
+                   "&:hover": {
+                     backgroundColor: isSmallScreen ? "#ef5350" : "#d32f2f", // Darker red for hover state
+                     borderColor: isSmallScreen ? "#ef5350" : "#d32f2f",
+                   },
+                   "&:active": {
+                     backgroundColor: isSmallScreen ? "#c62828" : "#c62828", // Even darker red for active state
+                     borderColor: isSmallScreen ? "#c62828" : "#c62828",
+                   },
+                 }}
+               >
+                 Remove
+               </Button>
                 ) : isInWatchListShows ? (
                   <Button
-                    variant="contained"
-                    color="error"
-                    startIcon={<RemoveCircleOutlineIcon />}
-                    onClick={() => handleRemoveFromWatched("show")}
-                    sx={{
-                      marginLeft: 0,
-                      fontSize: "0.875rem", // Increase font size for better readability
-                      padding: "8px 16px", // Add padding for a better touch target
-                      borderRadius: "4px", // Rounded corners
-                      backgroundColor: "#f44336", // A bold red color for visibility
-                      color: "#ffffff", // White text for contrast
-                      border: "1px solid #f44336", // Matching border color
-                      "&:hover": {
-                        backgroundColor: "#d32f2f", // Darker red for hover state
-                        borderColor: "#d32f2f",
-                      },
-                      "&:active": {
-                        backgroundColor: "#c62828", // Even darker red for active state
-                        borderColor: "#c62828",
-                      },
-                    }}
-                  >
-                    Remove
-                  </Button>
+                  variant="contained"
+                  color="error"
+                  startIcon={<RemoveCircleOutlineIcon />}
+                  onClick={() => handleRemoveFromWatched("show")}
+                  sx={{
+                    marginLeft: 0,
+                    fontSize: isSmallScreen ? "0.75rem" : "0.875rem", // Decrease font size on small screens
+                    padding: isSmallScreen ? "4px 8px" : "8px 16px", // Decrease padding on small screens
+                    borderRadius: "4px", // Rounded corners
+                    backgroundColor: isSmallScreen ? "#e57373" : "#f44336", // Change color on small screens
+                    color: "#ffffff", // White text for contrast
+                    border: isSmallScreen ? "1px solid #e57373" : "1px solid #f44336", // Matching border color
+                    "&:hover": {
+                      backgroundColor: isSmallScreen ? "#ef5350" : "#d32f2f", // Darker red for hover state
+                      borderColor: isSmallScreen ? "#ef5350" : "#d32f2f",
+                    },
+                    "&:active": {
+                      backgroundColor: isSmallScreen ? "#c62828" : "#c62828", // Even darker red for active state
+                      borderColor: isSmallScreen ? "#c62828" : "#c62828",
+                    },
+                  }}
+                >
+                  Remove
+                </Button>
                 ) : (
                   <>
                     <Box>
@@ -880,7 +892,7 @@ const MovieDetails = () => {
               sx={{
                 textAlign: "left",
                 lineHeight: 1.5, // Adjusted for readability
-                fontWeight: "600",
+                fontWeight: "bold",
                 mb: 1, // Margin bottom to separate the title from the content
               }}
             >
@@ -914,7 +926,7 @@ const MovieDetails = () => {
               color="white"
               sx={{
                 fontWeight: "bold",
-                mb: 2, // Margin bottom for spacing
+                mb: 1, // Margin bottom for spacing
                 textAlign: "left",
               }}
             >
@@ -926,8 +938,8 @@ const MovieDetails = () => {
               color="white"
               sx={{
                 fontSize: "1rem",
-                lineHeight: 1.6,
-                fontWeight: "400",
+                lineHeight: 1.4,
+                fontWeight: "100",
                 textAlign: "left", // Align text to the left
                 mb: 1, // Margin bottom for spacing
               }}
@@ -943,8 +955,8 @@ const MovieDetails = () => {
               color="white"
               sx={{
                 fontSize: "1rem",
-                lineHeight: 1.6,
-                fontWeight: "400",
+                lineHeight: 1.4,
+                fontWeight: "100",
                 textAlign: "left", // Align text to the left
                 mb: 1, // Margin bottom for spacing
               }}
@@ -960,8 +972,8 @@ const MovieDetails = () => {
               color="white"
               sx={{
                 fontSize: "1rem",
-                lineHeight: 1.6,
-                fontWeight: "400",
+                lineHeight: 1.4,
+                fontWeight: "100",
                 textAlign: "left", // Align text to the left
                 mb: 1, // Margin bottom for spacing
               }}
@@ -989,7 +1001,7 @@ const MovieDetails = () => {
               sx={{
                 textAlign: "left",
                 lineHeight: 1.5,
-                fontWeight: "600",
+                fontWeight: "bold",
                 mb: 1,
               }}
             >
