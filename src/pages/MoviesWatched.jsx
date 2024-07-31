@@ -10,6 +10,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
 import MyButton from "../UI/MyButton";
 import MyButton2 from "../UI/MyButton2";
+import { useMediaQuery } from '@mui/material';
 // Define the top 12 genres
 const TOP_GENRES = [
   "Action",
@@ -28,6 +29,7 @@ const TOP_GENRES = [
 
 const CombinedComponent = () => {
   const navigate = useNavigate();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
   const isMobile = useMediaQuery("(max-width:600px)");
   const [movieCount, setMovieCount] = useState(null);
   const [showCount, setShowCount] = useState(null);
