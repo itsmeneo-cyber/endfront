@@ -100,23 +100,23 @@ const MyFriends = () => {
                   <Tooltip title={`Notifications: ${friend.notificationCount}`}>
                     <IconButton edge="end" aria-label="Notifications" onClick={() => handleNotificationClick(friend)}>
                       <Badge badgeContent={friend.notificationCount} color="error">
-                        <NotificationsIcon />
+                      <NotificationsIcon style={{ color: "#f50" }} /> {/* Pink */}
                       </Badge>
                     </IconButton>
                   </Tooltip>
                   <Tooltip title="View Profile">
                     <IconButton edge="end" aria-label="View Profile" onClick={() => handleViewProfile(friend)}>
-                      <PersonIcon />
+                    <PersonIcon style={{ color: "#3f51b5" }} /> {/* Blue */}
                     </IconButton>
                   </Tooltip>
                   <Tooltip title="Remove Friend">
                     <IconButton edge="end" aria-label="Remove Friend" onClick={() => handleRemoveFriend(friend.uid)}>
-                      <RemoveIcon />
+                    <RemoveIcon style={{ color: "#f44336" }} /> {/* Red */}
                     </IconButton>
                   </Tooltip>
                   <Tooltip title="Start Chat">
                     <IconButton edge="end" aria-label="Start Chat" onClick={() => handleStartChat(friend)}>
-                      <ChatIcon />
+                    <ChatIcon style={{ color: "#4caf50" }} /> {/* Green */}
                     </IconButton>
                   </Tooltip>
                 </ListItemSecondaryAction>
