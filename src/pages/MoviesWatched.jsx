@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography, Button, useMediaQuery } from "@mui/material";
 import { useAuth } from "../contexts/AuthContext";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/FirebaseConfig";
@@ -7,10 +7,8 @@ import CustomDoughnut from "../utils/CustomDoughnut";
 import MovieIcon from "@mui/icons-material/Movie";
 import TvIcon from "@mui/icons-material/Tv";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMediaQuery } from "@mui/material";
-import MyButton from "../UI/MyButton";
 import MyButton2 from "../UI/MyButton2";
-// Define the top 12 genres
+
 const TOP_GENRES = [
   "Action",
   "Adventure",
@@ -65,7 +63,6 @@ const CombinedComponent = () => {
             setMovieCount(userData.WatchedMovies.length);
             setShowCount(userData.WatchedShows.length);
 
-            // Calculate chart data for movies and shows
             const genreCounts = new Array(TOP_GENRES.length).fill(0);
 
             const countGenres = (items) => {
@@ -81,7 +78,6 @@ const CombinedComponent = () => {
 
             countGenres(userData.WatchedMovies);
             countGenres(userData.WatchedShows);
-            console.log(genreCounts);
             setChartData(genreCounts);
           }
         } catch (error) {
@@ -95,13 +91,9 @@ const CombinedComponent = () => {
     fetchCounts();
   }, [currentUser, userId]);
 
-  // Determine the maximum count and its index
   const maxCount = Math.max(...chartData);
-  // console.log(maxCount);
   const maxCountIndex = chartData.indexOf(maxCount);
-  // console.log(maxCountIndex);
 
-  // Define chart labels and background colors
   const chartLabels = TOP_GENRES;
   const chartBackgroundColors = [
     "#FF5733",
@@ -117,6 +109,7 @@ const CombinedComponent = () => {
     "#FF6F61",
     "#9C27B0",
   ];
+
   return (
     <Box
       component="div"
@@ -125,7 +118,7 @@ const CombinedComponent = () => {
       alignItems="flex-start"
       justifyContent="space-between"
       bgcolor="#ffffff"
-      boxShadow="0px 2px 8px rgba(2, 255, 255, 0.6), 0px 0px 20px rgba(255, 255, 255, 0.8)" // Bright edge glow
+      boxShadow="0px 2px 8px rgba(2, 255, 255, 0.6), 0px 0px 20px rgba(255, 255, 255, 0.8)"
       borderRadius={10}
       padding={2}
     >
@@ -245,10 +238,10 @@ const CombinedComponent = () => {
               textAlign="center"
             >
               <Box
-                 sx={{
+                sx={{
                   backgroundColor: chartBackgroundColors[index],
                   borderRadius: "50%",
-                  width: isMobile? "10px" : "15px",
+                  width: isMobile ? "10px" : "15px",
                   height: isMobile ? "10px" : "15px",
                   marginBottom: 1,
                 }}
@@ -257,7 +250,7 @@ const CombinedComponent = () => {
                 variant="body2"
                 color="#3c3c3c"
                 sx={{
-                  fontSize: isMobile? "10px" : "14px",
+                  fontSize: isMobile ? "10px" : "14px",
                 }}
               >
                 {label}
