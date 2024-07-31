@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import RateReviewIcon from "@mui/icons-material/RateReview";
 import { doc, getDoc } from "firebase/firestore";
@@ -11,12 +11,14 @@ const TimeWatched = () => {
   const [timeWatched, setTimeWatched] = useState(null);
   const [reviewCount, setReviewCount] = useState(0);
   const [loading, setLoading] = useState(true);
-  const { currentUser } = useAuth(); // Get the current user from the AuthContext
-  const { userId } = useParams(); // Corrected useParams usage
+  const { currentUser } = useAuth();
+  const { userId } = useParams();
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   useEffect(() => {
     const fetchUserData = async () => {
-      const user = userId || currentUser.uid; // Use userId prop if available, otherwise use currentUser
+      const user = userId || currentUser.uid;
 
       if (user) {
         try {
@@ -24,17 +26,12 @@ const TimeWatched = () => {
           const userDocSnap = await getDoc(userDocRef);
           if (userDocSnap.exists()) {
             const userData = userDocSnap.data();
-            console.log("User Data:", userData);
             setReviewCount(userData.reviewCount);
 
             let totalTime = 0;
             const convertRuntimeToMinutes = (runtime) => {
               const minutes = parseInt(runtime);
-              if (!isNaN(minutes)) {
-                return minutes;
-              } else {
-                return 0;
-              }
+              return !isNaN(minutes) ? minutes : 0;
             };
 
             userData.WatchedMovies.forEach((movie) => {
@@ -45,7 +42,6 @@ const TimeWatched = () => {
               totalTime += convertRuntimeToMinutes(show.runtime);
             });
 
-            console.log("Total Time Watched:", totalTime);
             const hours = Math.floor(totalTime / 60);
             const minutes = totalTime % 60;
             const timeString = `${hours} hr ${minutes} min`;
@@ -61,7 +57,7 @@ const TimeWatched = () => {
     };
 
     fetchUserData();
-  }, [userId, currentUser]); // Add currentUser as a dependency
+  }, [userId, currentUser]);
 
   return (
     <Box
@@ -74,30 +70,9 @@ const TimeWatched = () => {
       marginTop={0}
       marginBottom={3}
       sx={{
-        bgcolor: "#ffffff", // Background color
-        borderRadius: 10, // Rounded corners
-        boxShadow: "0px 4px 12px rgba(2, 255, 255, 0.6), 0px 0px 20px rgba(255, 255, 255, 0.8)" // Bright edge glow
-        // transition: "transform 0.2s, box-shadow 0.2s", // Smooth transition
-        // "&:hover": {
-        //   transform: "scale(1.05)", // Scale up on hover
-        //   boxShadow: "0px 15px 20px rgba(0, 0, 0, 0.2)", // Increase shadow on hover
-        // },
-        // "&::after": {
-        //   content: '""',
-        //   position: "absolute",
-        //   top: 0,
-        //   left: 0,
-        //   right: 0,
-        //   bottom: 0,
-        //   borderRadius: 10,
-        //   userIdIndex: -1,
-        //   background: "linear-gradient(45deg, #f78940, #f9027e)", // Gradient background
-        //   opacity: 0,
-        //   transition: "opacity 0.3s ease-in-out", // Fade-in transition
-        // },
-        // "&:hover::after": {
-        //   opacity: 1, // Show gradient on hover
-        // },
+        bgcolor: "#ffffff",
+        borderRadius: 10,
+        boxShadow: "0px 4px 12px rgba(2, 255, 255, 0.6), 0px 0px 20px rgba(255, 255, 255, 0.8)",
       }}
     >
       <Box
@@ -110,12 +85,12 @@ const TimeWatched = () => {
         padding={2}
       >
         <Box display="flex" alignItems="center" marginBottom={1}>
-          <AccessTimeIcon sx={{ fontSize: 35, color: "#00509d" }} />
-          <Typography variant="h6" color="#3c3c3c" marginLeft={1}>
+          <AccessTimeIcon sx={{ fontSize: isSmallScreen ? 30 : 35, color: "#00509d" }} />
+          <Typography variant={isSmallScreen ? "body1" : "h6"} color="#3c3c3c" marginLeft={1}>
             Time Watched
           </Typography>
         </Box>
-        <Typography variant="h5" color="#00509d" sx={{ml:6}}>
+        <Typography variant={isSmallScreen ? "h6" : "h5"} color="#00509d" sx={{ ml: 6 }}>
           {loading ? "Loading..." : timeWatched}
         </Typography>
       </Box>
@@ -127,15 +102,15 @@ const TimeWatched = () => {
         alignItems="flex-start"
         justifyContent="center"
         width="100%"
-        padding={2} // Adjusted padding for review count
+        padding={2}
       >
         <Box display="flex" alignItems="center" marginBottom={1}>
-          <RateReviewIcon sx={{ fontSize: 35, color: "#3dccc7" }} />
-          <Typography variant="h6" color="#3c3c3c" marginLeft={1}>
+          <RateReviewIcon sx={{ fontSize: isSmallScreen ? 30 : 35, color: "#3dccc7" }} />
+          <Typography variant={isSmallScreen ? "body1" : "h6"} color="#3c3c3c" marginLeft={1}>
             Review Count
           </Typography>
         </Box>
-        <Typography variant="h5" color="#3dccc7" sx={{ml:6}}>
+        <Typography variant={isSmallScreen ? "h6" : "h5"} color="#3dccc7" sx={{ ml: 6 }}>
           {loading ? "Loading..." : reviewCount}
         </Typography>
       </Box>

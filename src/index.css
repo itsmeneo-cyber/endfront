@@ -193,6 +193,9 @@ body {
     padding: 3px 12px;
     margin-top: 7px;
     text-align: start;
+    background-size: 100% auto;
+    font-weight: 200px;
+    font-size: 0.5rem;
   }
 }
 
