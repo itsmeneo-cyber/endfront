@@ -35,14 +35,14 @@ const LatestMovies = () => {
   };
 
   if (loading) {
-    return <CircularProgress sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", color: "#00ff15" }} />;
+    return <CircularProgress sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", color: "#1976d2" }} />;
   }
 
   return (
     <Box sx={{ bgcolor: "#121212", minHeight: "100vh", padding: 2 }}>
       <IconButton
         onClick={handleBack}
-        sx={{ position: "fixed", top: 10, left: 10, color: "#00ff15" }}
+        sx={{ position: "fixed", top: 10, left: 10, color: "#1976d2" }}
       >
         <ArrowBackIcon />
       </IconButton>
@@ -67,7 +67,7 @@ const LatestMovies = () => {
                 justifyContent: 'space-between',
                 position: "relative",
                 backgroundColor: "#1e1e1e",
-                boxShadow: '0 0 15px #00ff15',
+                boxShadow: '0 0 15px rgba(25, 118, 210, 0.7)',
                 cursor: "pointer",
                 '&:hover': {
                   opacity: 0.9,
@@ -103,11 +103,11 @@ const LatestMovies = () => {
                   backgroundColor: '#1e1e1e',
                   display: 'flex',
                   flexDirection: 'column',
-                  color: '#00ff15'
+                  color: '#1976d2'
                 }}
               >
-                <Typography variant="subtitle1" sx={{ display: "flex", alignItems: "center", mb: 1, fontWeight: "bold", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "#00ff15" }}>
-                  <MovieIcon sx={{ marginRight: 1, color: "#ff1744" }} /> Movie Name: {movie.title}
+                <Typography variant="h6" sx={{ display: "flex", alignItems: "center", mb: 1, fontWeight: "bold", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "#ffffff" }}>
+                  {movie.title}
                 </Typography>
                 <Typography variant="body2" sx={{ display: "flex", alignItems: "center", fontWeight: "bold", color: "#ff9100" }}>
                   <CalendarTodayIcon sx={{ marginRight: 1, color: "#ff9100" }} /> Release Date: {new Date(movie.source_release_date).toDateString()}
