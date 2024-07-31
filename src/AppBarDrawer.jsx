@@ -28,7 +28,7 @@ import MailIcon from "@mui/icons-material/Mail";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import ClearIcon from "@mui/icons-material/Clear";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useAuth } from "./contexts/AuthContext"; // Import useAuth hook
+import { useAuth } from "./contexts/AuthContext";
 import { useMediaQuery } from "@mui/material";
 
 const drawerWidth = 220;
@@ -84,7 +84,7 @@ const ClearIconWrapper = styled(IconButton)(({ theme }) => ({
   padding: theme.spacing(0, 2),
   height: "100%",
   position: "absolute",
-  right: theme.spacing(4),
+  right: theme.spacing(3),
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -93,9 +93,9 @@ const ClearIconWrapper = styled(IconButton)(({ theme }) => ({
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "inherit",
   width: "100%",
-  border: "3px solid #00ff00", // Neon border color
+  border: "3px solid #a9d6e5",
   borderRadius: theme.shape.borderRadius,
-  boxShadow: `0 0 10px rgba(0, 255, 0, 0.8)`, // Neon glow effect
+  boxShadow: `0 0 10px #a9d6e5`,
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
     paddingLeft: theme.spacing(2),
@@ -103,7 +103,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     width: "100%",
     fontStyle: "italic",
     [theme.breakpoints.up("md")]: {
-      width: "20ch",
+      width: "30ch",
     },
   },
 }));
@@ -123,7 +123,7 @@ const DrawerPaper = styled(Paper)(({ theme }) => ({
   boxSizing: "border-box",
   backgroundColor: "#1f1f1f",
   color: "#fff",
-  elevation: 10,
+  elevation: 40,
   border: "none",
   overflow: "hidden",
 }));
@@ -142,7 +142,7 @@ const AppBarDrawer = ({ children }) => {
   const [openDrawer, setOpenDrawer] = React.useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { currentUser, logout } = useAuth(); // Using useAuth hook
+  const { currentUser, logout } = useAuth();
 
   React.useEffect(() => {
     if (!location.pathname.startsWith("/search")) {
@@ -176,16 +176,15 @@ const AppBarDrawer = ({ children }) => {
   const handleListItemClick = async (link) => {
     setOpenDrawer(false);
     if (link === "/signup" && currentUser) {
-      // Log out the user if currently logged in
       try {
         await logout();
       } catch (error) {
         console.error("Error logging out:", error);
       } finally {
-        navigate(link); // Navigate to the sign-up page
+        navigate(link);
       }
     } else {
-      navigate(link); // Navigate to the selected link
+      navigate(link);
     }
   };
 
@@ -239,8 +238,8 @@ const AppBarDrawer = ({ children }) => {
             onClick={() => handleListItemClick(item.link)}
           >
             <ListItemIcon sx={{ paddingBottom: "20px" }}>
-  {item.icon}
-</ListItemIcon>
+              {item.icon}
+            </ListItemIcon>
             <ListItemText
               primary={item.text}
               primaryTypographyProps={{
@@ -279,21 +278,21 @@ const AppBarDrawer = ({ children }) => {
               <MenuIcon />
             </IconButton>
             <Typography
-  variant="h6"
-  noWrap
-  component="div"
-  sx={{
-    display: { xs: "none", sm: "block" },
-    fontStyle: "italic",
-    marginRight: "15px", // Adjust the space from the right as needed
-    background: "linear-gradient(to right, #BDC3C7, #2C3E)",
-           WebkitBackgroundClip: "text", // Apply gradient to text
-    color: "transparent", // Make text color transparent to show gradient
-    fontWeight: "bold", // Optional: Make text bold for a more pronounced effect
-  }}
->
-  CineConnect
-</Typography>
+              variant="h6"
+              noWrap
+              component="div"
+              sx={{
+                display: { xs: "none", sm: "block" },
+                fontStyle: "italic",
+                marginRight: "15px",
+                background: "linear-gradient(to right, #BDC3C7, #ffffff)",
+                WebkitBackgroundClip: "text",
+                color: "transparent",
+                fontWeight: "bold",
+              }}
+            >
+              CineConnect
+            </Typography>
 
             <Box sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}>
               <Search>
@@ -302,15 +301,15 @@ const AppBarDrawer = ({ children }) => {
                   inputProps={{ "aria-label": "search" }}
                   value={query}
                   onChange={handleSearch}
-                  sx={{ backgroundColor: "#000000" }} // Add this line
+                  sx={{ backgroundColor: "#000000" }}
                 />
                 {query && (
                   <ClearIconWrapper onClick={clearSearch}>
-                    <ClearIcon style={{ color: "#6200ea" }} />
+                    <ClearIcon style={{ color: "#ffffff" }} />
                   </ClearIconWrapper>
                 )}
                 <SearchIconWrapper>
-                  <SearchIcon style={{ color: "#6200ea" }} />
+                  <SearchIcon style={{ color: "#ffffff" }} />
                 </SearchIconWrapper>
               </Search>
             </Box>

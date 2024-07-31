@@ -8,7 +8,7 @@
 .loader {
   display: flex;
   justify-content: space-between;
-  width: 80px; /* Adjust the width to fit the loader circles */
+  width: 80px; 
 }
 
 .loader-circle {

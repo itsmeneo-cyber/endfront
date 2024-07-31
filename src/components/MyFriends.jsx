@@ -17,14 +17,13 @@ const MyFriends = () => {
 
     const userRef = doc(db, "users", currentUser.uid);
 
-    // Set up real-time listener for the user's document
     const unsubscribe = onSnapshot(userRef, (docSnapshot) => {
       const userData = docSnapshot.data();
       if (userData && userData.friends) {
-        // Update the friends list with the latest data
+        
         const updatedFriends = [...userData.friends];
         
-        // Sort friends by lastMessageReceived
+       
         updatedFriends.sort((a, b) => (b.lastMessageReceived?.toDate() || 0) - (a.lastMessageReceived?.toDate() || 0));
 
         setFriends(updatedFriends);
@@ -32,7 +31,7 @@ const MyFriends = () => {
       }
     });
 
-    // Cleanup function to unsubscribe from the listener
+   
     return () => {
       unsubscribe();
     };
@@ -40,14 +39,14 @@ const MyFriends = () => {
 
   const handleRemoveFriend = async (friendId) => {
     try {
-      // Remove friend from Firestore
+     
       const userRef = doc(db, "users", currentUser.uid);
       const updatedFriends = friends.filter((friend) => friend.uid !== friendId);
       await updateDoc(userRef, {
         friends: updatedFriends,
       });
 
-      // Remove friend locally
+     
       setFriends(updatedFriends);
     } catch (error) {
       console.error("Error removing friend:", error);

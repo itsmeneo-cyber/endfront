@@ -26,7 +26,7 @@ const SearchUser = () => {
 
   useEffect(() => {
     if (searchTerm === "") {
-      // Clear search results when search term is empty
+    
       setSearchResults([]);
       setLoading(false);
       return;
@@ -84,7 +84,7 @@ const SearchUser = () => {
           const newSearchTerm = e.target.value;
           setSearchTerm(newSearchTerm);
           if (!newSearchTerm) {
-            setSearchResults([]); // Clear search results if the search term is empty
+            setSearchResults([]); 
           }
         }}
         fullWidth
@@ -125,8 +125,8 @@ const SearchUser = () => {
                     boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
                   },
                   display: "flex",
-                  flexDirection: isSmallScreen ? "row" : "row", // Adjust direction based on screen size
-                  alignItems: isSmallScreen ? "flex-start" : "flex-start", // Center align on small screens
+                  flexDirection: isSmallScreen ? "row" : "row", 
+                  alignItems: isSmallScreen ? "flex-start" : "flex-start", 
                   p: 2,
                   bg: "white",
                 }}
@@ -138,8 +138,8 @@ const SearchUser = () => {
                   <Box
                     sx={{
                       display: "flex",
-                      alignItems: "center", // Align items vertically in the center
-                      mb: isSmallScreen ? 1 : 0, // Adjust bottom margin on small screens
+                      alignItems: "center", 
+                      mb: isSmallScreen ? 1 : 0, 
                     }}
                   >
                     <Box
@@ -186,9 +186,9 @@ const SearchUser = () => {
                       minWidth: "auto",
                       px: isSmallScreen ? 1 : 2,
                       py: isSmallScreen ? 0.5 : 1,
-                      fontSize: isSmallScreen ? "0.75rem" : "0.875rem", // Adjust font size
+                      fontSize: isSmallScreen ? "0.75rem" : "0.875rem", 
                       mr: isSmallScreen ? 1 : 2,
-                      textTransform: "none", // Ensure text decoration remains as it is
+                      textTransform: "none", 
                     }}
                   >
                     Make Connection

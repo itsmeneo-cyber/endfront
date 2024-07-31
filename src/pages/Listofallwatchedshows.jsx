@@ -128,7 +128,7 @@ const Listofallshowswatched = () => {
                       </Typography>
                       <Rating
                         name="imdb-rating"
-                        value={show.imdbRating} // Assuming the IMDb rating is out of 10
+                        value={show.imdbRating} 
                         readOnly
                         max={10}
                         precision={0.5}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Card, CardMedia, Typography, CircularProgress, IconButton, useMediaQuery, useTheme } from "@mui/material";
-import { ArrowBack as ArrowBackIcon, CalendarToday as CalendarTodayIcon, Movie as MovieIcon } from "@mui/icons-material";
+import { ArrowBack as ArrowBackIcon, CalendarToday as CalendarTodayIcon } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
 const API_URL = process.env.REACT_APP_BACKEND_URL;
@@ -19,7 +19,7 @@ const LatestMovies = () => {
           throw new Error(`HTTP error! status: ${res.status}`);
         }
         const json = await res.json();
-        setMovies(json.releases); // Ensure this matches the structure of your response
+        setMovies(json.releases); 
       } catch (error) {
         console.error("Error fetching movies:", error);
       } finally {
@@ -60,8 +60,8 @@ const LatestMovies = () => {
           >
             <Card
               sx={{
-                width: 200,
-                height: 300,
+                width: isSmallScreen ? 150 : 200,
+                height: isSmallScreen ? 250 : 300,
                 display: 'flex',
                 flexDirection: 'column',
                 justifyContent: 'space-between',
@@ -81,12 +81,12 @@ const LatestMovies = () => {
                   component="img"
                   image={movie.poster_url}
                   alt={movie.title}
-                  sx={{ height: 200, objectFit: 'cover' }}
+                  sx={{ height: isSmallScreen ? 150 : 200, objectFit: 'cover' }}
                 />
               ) : (
                 <Box
                   sx={{
-                    height: 200,
+                    height: isSmallScreen ? 150 : 200,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -106,11 +106,34 @@ const LatestMovies = () => {
                   color: '#1976d2'
                 }}
               >
-                <Typography variant="h6" sx={{ display: "flex", alignItems: "center", mb: 1, fontWeight: "bold", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "#ffffff" }}>
+                <Typography 
+                  variant="h6" 
+                  sx={{ 
+                    display: "flex", 
+                    alignItems: "center", 
+                    mb: 1, 
+                    fontWeight: "bold", 
+                    overflow: "hidden", 
+                    textOverflow: "ellipsis", 
+                    whiteSpace: "nowrap", 
+                    color: "#ffffff",
+                    fontSize: isSmallScreen ? "0.9rem" : "1.2rem"
+                  }}
+                >
                   {movie.title}
                 </Typography>
-                <Typography variant="body2" sx={{ display: "flex", alignItems: "center", fontWeight: "bold", color: "#ff9100" }}>
-                  <CalendarTodayIcon sx={{ marginRight: 1, color: "#ff9100" }} /> Release Date: {new Date(movie.source_release_date).toDateString()}
+                <Typography 
+                  variant="body2" 
+                  sx={{ 
+                    display: "flex", 
+                    alignItems: "center", 
+                    fontWeight: "bold", 
+                    color: "#f9dc5c",
+                    fontSize: isSmallScreen ? "0.75rem" : "0.9rem"
+                  }}
+                >
+                  <CalendarTodayIcon sx={{ marginRight: 1, color: "#f9dc5c" }} /> 
+                  Release Date: {new Date(movie.source_release_date).toDateString()}
                 </Typography>
               </Box>
             </Card>

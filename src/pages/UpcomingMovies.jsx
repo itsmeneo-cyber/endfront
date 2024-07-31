@@ -7,7 +7,7 @@ const UpcomingMovies = () => {
   const navigate = useNavigate();
 
   const handleExploreMore = () => {
-    navigate("/latestMovies"); // Navigate to MovieList component
+    navigate("/latestMovies"); 
   };
 
   return (
@@ -52,15 +52,15 @@ const UpcomingMovies = () => {
           variant="contained"
           onClick={handleExploreMore}
           sx={{
-            backgroundColor: "#0288d1", // Bright blue background
-            color: "#ffffff",           // White text
+            backgroundColor: "#0288d1", 
+            color: "#ffffff",         
             marginTop: 1,
             borderRadius: 8,
             padding: '8px 20px',
             boxShadow: '0px 4px 10px rgba(0, 0, 0, 0.3)',
             textTransform: 'none',
             '&:hover': {
-              backgroundColor: "#01579b", // Darker blue on hover
+              backgroundColor: "#01579b", 
               boxShadow: '0px 6px 15px rgba(0, 0, 0, 0.4)',
             },
           }}

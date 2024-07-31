@@ -1,6 +1,5 @@
 import React from 'react';
 
-// Define the button component
 const GlowingButton = ({ text }) => {
   return (
     <button style={styles.button} role="button">
@@ -9,7 +8,7 @@ const GlowingButton = ({ text }) => {
   );
 };
 
-// Define the styles in a JavaScript object
+
 const styles = {
   button: {
     padding: '0.6em 2em',
@@ -27,7 +26,7 @@ const styles = {
     fontSize: '16px',
     overflow: 'hidden',
     boxShadow: '0 0 5px rgba(0,0,0,0.3)',
-    // Add transition for smoother effects
+   
     transition: 'background 0.3s ease',
   },
   buttonBefore: {
@@ -57,7 +56,7 @@ const styles = {
   },
 };
 
-// Add keyframes animation to global styles
+
 const keyframes = `
 @keyframes glowing-button-85 {
   0% {
@@ -72,7 +71,7 @@ const keyframes = `
 }
 `;
 
-// Create a <style> element with the keyframes animation
+
 const styleSheet = document.createElement("style");
 styleSheet.type = "text/css";
 styleSheet.innerText = keyframes;

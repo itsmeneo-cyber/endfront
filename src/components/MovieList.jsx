@@ -44,7 +44,7 @@ const MovieList = ({ movies = [] }) => {
             key={movie.imdbID}
             component={Link}
             to={`/movie/${movie.imdbID}`}
-            state={{ movie }} // Pass movie data via state
+            state={{ movie }} 
             sx={{
               width: "100%",
               display: "flex",
@@ -90,7 +90,7 @@ const MovieList = ({ movies = [] }) => {
                     whiteSpace: "nowrap",
                     overflow: "hidden",
                     textOverflow: "ellipsis",
-                    maxWidth: { xs: "120px", sm: "230px" }, // Adjust max-width for ellipsis
+                    maxWidth: { xs: "120px", sm: "230px" }, 
                     fontSize: { xs: "0.8rem", sm: "1rem" },
                   }}
                 >
@@ -119,7 +119,7 @@ const MovieList = ({ movies = [] }) => {
             <Button
               component={Link}
               to={`/movie/${movie.imdbID}`}
-              state={{ movie }} // Pass movie data via state
+              state={{ movie }}
               variant="contained"
               color="primary"
               size="small"

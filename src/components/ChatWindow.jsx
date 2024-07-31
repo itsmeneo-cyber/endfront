@@ -52,8 +52,6 @@ const ChatWindow = () => {
   const messagesEndRef = useRef(null);
   const chatRoomId = [currentUser?.uid, id].sort().join("_");
   const [isFetchingMore, setIsFetchingMore] = useState(false);
-
-  // Fetch friend info useEffect
   useEffect(() => {
     const fetchData = async () => {
       try {

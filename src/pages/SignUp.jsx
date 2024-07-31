@@ -14,27 +14,27 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const CustomTextField = styled(TextField)(({ theme }) => ({
   "& .MuiInputBase-input": {
-    color: "#333", // Modern text color
+    color: "#333", 
   },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
-      borderColor: "#ccc", // Light border color
+      borderColor: "#ccc", 
     },
     "&:hover fieldset": {
-      borderColor: "#888", // Slightly darker border on hover
+      borderColor: "#888", 
     },
     "&.Mui-focused fieldset": {
-      borderColor: "#007bff", // Bright blue border when focused
+      borderColor: "#007bff", 
     },
   },
   "& .MuiInputLabel-root": {
-    color: "#666", // Modern label color
+    color: "#666", 
   },
   "& .MuiInputLabel-shrink": {
-    color: "#007bff", // Bright blue label when shrunk
+    color: "#007bff", 
   },
   "& .MuiFormHelperText-root": {
-    color: "#d9534f", // Error text color
+    color: "#d9534f", 
   },
 }));
 
@@ -60,9 +60,9 @@ const SignUp = () => {
           const canvas = document.createElement('canvas');
           const ctx = canvas.getContext('2d');
           
-          // Set the maximum dimensions for the resized image
-          const maxWidth = 200; // Adjust as needed
-          const maxHeight = 200; // Adjust as needed
+       
+          const maxWidth = 200; 
+          const maxHeight = 200; 
 
           let width = img.width;
           let height = img.height;
@@ -101,13 +101,13 @@ const SignUp = () => {
     }
   };
   const handleGoBack = () => {
-    navigate(-1); // Navigate to the previous page
+    navigate(-1); 
   };
   const handleSignUp = async (e) => {
     e.preventDefault();
-    setLoading(true); // Set loading to true while signing up
+    setLoading(true); 
     try {
-      // Check if displayName already exists
+
       const displayNameExists = await checkDisplayNameExists(displayName.toLowerCase());
       if (displayNameExists) {
         setError("CineConnect says: Display Name already exists 😔");
@@ -115,7 +115,7 @@ const SignUp = () => {
         return; // Exit early to prevent sign-up
       }
 
-      // Proceed with sign-up
+   
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
       const lowercaseDisplayName = displayName.toLowerCase();
       let imageUrl = "";
@@ -146,17 +146,17 @@ const SignUp = () => {
         location: location,
       });
 
-      // Navigate to sign-in page after successful sign-up
+  
       navigate("/");
     } catch (error) {
       console.error("Error creating user: ", error);
       setError(`CineConnect says: ${error.message.replace("Firebase: ", "")}`);
     } finally {
-      setLoading(false); // Set loading back to false after sign-up attempt
+      setLoading(false); 
     }
   };
 
-  // Function to check if displayName already exists
+ 
   const checkDisplayNameExists = async (displayName) => {
     try {
       const q = query(
@@ -164,7 +164,7 @@ const SignUp = () => {
         where("displayName", "==", displayName)
       );
       const querySnapshot = await getDocs(q);
-      return !querySnapshot.empty; // Return true if displayName exists, false otherwise
+      return !querySnapshot.empty; 
     } catch (error) {
       console.error("Error checking display name:", error);
       return false;
@@ -241,7 +241,7 @@ const SignUp = () => {
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            style={{ display: "none" }} // Hide the default input
+            style={{ display: "none" }} 
             id="image-upload-input"
           />
           <label htmlFor="image-upload-input">
@@ -273,7 +273,7 @@ const SignUp = () => {
             variant="contained"
             color="primary"
             type="submit"
-            disabled={loading} // Disable the button while loading
+            disabled={loading} 
             sx={{ mt: 2 }}
           >
             {loading ? <StylishLoader /> : "Sign Up"}

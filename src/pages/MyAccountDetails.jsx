@@ -10,7 +10,7 @@ import HashLoader from "react-spinners/HashLoader";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { useMediaQuery, useTheme } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import { db } from "../firebase/FirebaseConfig"; // import db
+import { db } from "../firebase/FirebaseConfig"; 
 import { doc, getDoc } from "firebase/firestore";
 
 const override = {
@@ -29,7 +29,7 @@ const MyAccountDetails = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [userData, setUserData] = useState(null); // State to store user data
+  const [userData, setUserData] = useState(null); 
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -201,7 +201,7 @@ const MyAccountDetails = () => {
                 fontStyle: "italic",
               }}
             >
-              Location: {userData?.location || "N/A"} {/* Display location from userData */}
+              Location: {userData?.location || "N/A"} 
             </Typography>
           }
           color="success"

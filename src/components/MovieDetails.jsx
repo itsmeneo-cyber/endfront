@@ -56,11 +56,10 @@ import {
   ArrowBack as ArrowBackIcon,
   MovieFilter as MovieFilterIcon,
   Add as AddIcon,
-} from "@mui/icons-material"; // Importing icons
+} from "@mui/icons-material"; 
 import { keyframes } from "@mui/system";
-import { MovieFilter } from "@mui/icons-material"; // Example Material-UI icon
+import { MovieFilter } from "@mui/icons-material";
 
-// Define keyframes for scaling animation
 const scaleAnimation = keyframes`
   0% {
     transform: scale(1);
@@ -73,7 +72,6 @@ const scaleAnimation = keyframes`
   }
 `;
 
-const KEY = "191e8f35";
 const renderIcon = (label) => {
   switch (label.toLowerCase()) {
     case "original title":
@@ -236,10 +234,8 @@ const MovieDetails = () => {
             ? userData.WatchedMovies
             : userData.WatchedShows;
   
-        // Ensure reviewCount is a valid number, defaulting to 0 if it's undefined or invalid
         const currentReviewCount = Number.isFinite(userData.reviewCount) ? userData.reviewCount : 0;
   
-        // Create the updated watched list with the new review
         const updatedWatchedList = [
           ...watchedList.filter(item => item.imdbID !== imdbID), // Remove the existing entry if it exists
           {
@@ -251,17 +247,17 @@ const MovieDetails = () => {
             review: review,
             watchedOn: new Date(),
             genres: watchmodeMovie.genre_names,
-            rating: userRating, // Assuming this is the user's personal rating
+            rating: userRating, 
           },
         ];
   
-        // Update the user's document
+    
         await setDoc(
           userDocRef,
           {
             [typeToAdd === "movie" ? "WatchedMovies" : "WatchedShows"]:
               updatedWatchedList,
-            reviewCount: currentReviewCount + 1, // Safely increment the reviewCount
+            reviewCount: currentReviewCount + 1, 
           },
           { merge: true }
         );
@@ -294,16 +290,15 @@ const MovieDetails = () => {
           (item) => item.imdbID !== imdbID
         );
   
-        // Ensure reviewCount is a valid number, defaulting to 0 if it's undefined or invalid
+        
         const currentReviewCount = Number.isFinite(userData.reviewCount) ? userData.reviewCount : 0;
   
-        // Update the user's document
         await setDoc(
           userDocRef,
           {
             [type === "movie" ? "WatchedMovies" : "WatchedShows"]:
               updatedWatchedList,
-            reviewCount: Math.max(currentReviewCount - 1, 0), // Safely decrement reviewCount, ensuring it doesn't go below 0
+            reviewCount: Math.max(currentReviewCount - 1, 0), 
           },
           { merge: true }
         );
@@ -324,16 +319,13 @@ const MovieDetails = () => {
   
   const handleRatingChange = async (event, newValue) => {
     setUserRating(newValue);
-    // if (currentUser) {
-    //   const docRef = doc(db, "watchedMovies", `${currentUser.uid}_${imdbID}`);
-    //   await setDoc(docRef, { rating: newValue }, { merge: true });
-    // }
+
   };
 
   useEffect(() => {
     const timeout = setTimeout(() => {
       setPosterLoading(false);
-    }, 3000); // 5 seconds delay to simulate loading
+    }, 2000); 
 
     return () => clearTimeout(timeout);
   }, []);
@@ -346,7 +338,7 @@ const MovieDetails = () => {
       return acc;
     }, []);
 
-    return uniquePlatforms.slice(0, 4); // Limit to three unique platforms
+    return uniquePlatforms.slice(0, 4); 
   };
 
   const getPlatformIcon = (name) => {
@@ -450,8 +442,8 @@ const MovieDetails = () => {
   return (
     <Box
       pl={isSmallScreen ? 0 : 10}
-      pr={isSmallScreen ? 0 : 10} // Adjust padding based on screen size
-      // Adjust padding based on screen size
+      pr={isSmallScreen ? 0 : 10} 
+    
       bgcolor="#000000"
       borderRadius={0}
       boxShadow={0}
@@ -465,7 +457,7 @@ const MovieDetails = () => {
             color: "#00000",
             zIndex: (theme) => theme.zIndex.drawer + 10,
             marginLeft: isSmallScreen ? "0" : "220px",
-            // Margin based on screen size
+        
             marginTop: isSmallScreen ? "56px" : "64px",
           }}
           open={true}
@@ -589,12 +581,12 @@ const MovieDetails = () => {
                         max={10}
                         size="small"
                         sx={{
-                          marginLeft: 0, // Adjust margin if needed
+                          marginLeft: 0, 
                           "& .MuiRating-icon": {
-                            width: "14px", // Smaller width for the stars
-                            height: "14px", // Smaller height for the stars
-                            marginRight: "0px", // Reduce spacing between stars
-                            color: "#ffffff", // Color of the stars
+                            width: "14px", 
+                            height: "14px", 
+                            marginRight: "0px", 
+                            color: "#ffffff", 
                           },
                         }}
                       />
@@ -609,18 +601,18 @@ const MovieDetails = () => {
                  onClick={() => handleRemoveFromWatched("movie")}
                  sx={{
                    marginLeft: 0,
-                   fontSize: isSmallScreen ? "0.75rem" : "0.875rem", // Decrease font size on small screens
-                   padding: isSmallScreen ? "4px 8px" : "8px 16px", // Decrease padding on small screens
-                   borderRadius: "4px", // Rounded corners
-                   backgroundColor: isSmallScreen ? "#e57373" : "#f44336", // Change color on small screens
+                   fontSize: isSmallScreen ? "0.75rem" : "0.875rem",
+                   padding: isSmallScreen ? "4px 8px" : "8px 16px", 
+                   borderRadius: "4px", 
+                   backgroundColor: isSmallScreen ? "#e57373" : "#f44336", 
                    color: "#ffffff", // White text for contrast
-                   border: isSmallScreen ? "1px solid #e57373" : "1px solid #f44336", // Matching border color
+                   border: isSmallScreen ? "1px solid #e57373" : "1px solid #f44336", 
                    "&:hover": {
-                     backgroundColor: isSmallScreen ? "#ef5350" : "#d32f2f", // Darker red for hover state
+                     backgroundColor: isSmallScreen ? "#ef5350" : "#d32f2f", 
                      borderColor: isSmallScreen ? "#ef5350" : "#d32f2f",
                    },
                    "&:active": {
-                     backgroundColor: isSmallScreen ? "#c62828" : "#c62828", // Even darker red for active state
+                     backgroundColor: isSmallScreen ? "#c62828" : "#c62828", 
                      borderColor: isSmallScreen ? "#c62828" : "#c62828",
                    },
                  }}
@@ -635,18 +627,17 @@ const MovieDetails = () => {
                   onClick={() => handleRemoveFromWatched("show")}
                   sx={{
                     marginLeft: 0,
-                    fontSize: isSmallScreen ? "0.75rem" : "0.875rem", // Decrease font size on small screens
-                    padding: isSmallScreen ? "4px 8px" : "8px 16px", // Decrease padding on small screens
-                    borderRadius: "4px", // Rounded corners
-                    backgroundColor: isSmallScreen ? "#e57373" : "#f44336", // Change color on small screens
+                    fontSize: isSmallScreen ? "0.75rem" : "0.875rem",
+                    padding: isSmallScreen ? "4px 8px" : "8px 16px", 
+                    borderRadius: "4px", 
+                    backgroundColor: isSmallScreen ? "#e57373" : "#f44336", 
                     color: "#ffffff", // White text for contrast
-                    border: isSmallScreen ? "1px solid #e57373" : "1px solid #f44336", // Matching border color
+                    border: isSmallScreen ? "1px solid #e57373" : "1px solid #f44336", 
                     "&:hover": {
-                      backgroundColor: isSmallScreen ? "#ef5350" : "#d32f2f", // Darker red for hover state
-                      borderColor: isSmallScreen ? "#ef5350" : "#d32f2f",
+                      backgroundColor: isSmallScreen ? "#ef5350" : "#d32f2f", 
                     },
                     "&:active": {
-                      backgroundColor: isSmallScreen ? "#c62828" : "#c62828", // Even darker red for active state
+                      backgroundColor: isSmallScreen ? "#c62828" : "#c62828",
                       borderColor: isSmallScreen ? "#c62828" : "#c62828",
                     },
                   }}
@@ -682,7 +673,7 @@ const MovieDetails = () => {
                           onClick={() => handleAddToWatched("movie")}
                           sx={{
                             fontSize: "0.75rem",
-                            color: "#000", // Adjusted to a more readable size
+                            color: "#000", 
                             backgroundColor: "#fff",
                             "&:hover": {
                               backgroundColor: "#444",
@@ -695,7 +686,7 @@ const MovieDetails = () => {
                           onClick={() => handleAddToWatched("show")}
                           sx={{
                             color: "#000",
-                            fontSize: "0.75rem", // Adjusted to a more readable size
+                            fontSize: "0.75rem", 
                             backgroundColor: "#fff",
                             "&:hover": {
                               backgroundColor: "#444",
@@ -716,24 +707,24 @@ const MovieDetails = () => {
                   margin: 0,
                   borderRadius: 1,
                   boxShadow: 1,
-                  backgroundColor: "#000000", // Background color for the box
-                  width: "100%", // Ensure the box takes full width
+                  backgroundColor: "#000000", 
+                  width: "100%", 
                   display: "flex",
                   alignItems: "center",
                   marginBottom: 1,
                 }}
               >
                 <Typography
-                  variant="h5" // Use appropriate variant for prominence
+                  variant="h5" 
                   color="white"
                   sx={{
                     fontWeight: "500",
-                    overflow: "hidden", // Hide overflow content
-                    textOverflow: "ellipsis", // Add ellipsis for overflowed text
-                    whiteSpace: "normal", // Allow text to wrap
-                    lineHeight: 1.4, // Adjust line height for readability
-                    wordBreak: "break-word", // Break long words if needed
-                    width: "100%", // Ensure typography takes full width
+                    overflow: "hidden", 
+                    textOverflow: "ellipsis", 
+                    whiteSpace: "normal", 
+                    lineHeight: 1.4,
+                    wordBreak: "break-word", 
+                    width: "100%", 
                   }}
                 >
                   {omdbMovie?.Title || "Untitled"}
@@ -754,9 +745,9 @@ const MovieDetails = () => {
                       variant="outlined"
                       size="medium"
                       sx={{
-                        backgroundColor: "#333333", // Lightish black
-                        color: "#ffffff", // White text for contrast
-                        border: "1px solid #444444", // Slightly lighter border
+                        backgroundColor: "#333333", 
+                        color: "#ffffff", 
+                        border: "1px solid #444444", 
                         marginRight: 1,
                         marginBottom: isSmallScreen ? 1 : 2,
                       }}
@@ -771,21 +762,20 @@ const MovieDetails = () => {
                 flexWrap="wrap"
                 alignItems="center"
               >
-                {/* Year Chip */}
+         
                 <Chip
                   label={`Year: ${omdbMovie?.Year || "N/A"}`}
                   variant="outlined"
                   size="medium"
                   sx={{
-                    backgroundColor: "#333333", // Subtle grey color
-                    color: "#ffffff", // White text for contrast
-                    border: "1px solid #444444", // Slightly lighter border
+                    backgroundColor: "#333333", 
+                    color: "#ffffff", 
+                    border: "1px solid #444444", 
                     marginRight: 2,
                     marginBottom: isSmallScreen ? 1 : 0,
                   }}
                 />
 
-                {/* Runtime Chip */}
                 <Chip
                   label={`Runtime: ${
                     omdbMovie?.Runtime ? omdbMovie.Runtime : "N/A"
@@ -793,11 +783,11 @@ const MovieDetails = () => {
                   variant="outlined"
                   size="medium"
                   sx={{
-                    backgroundColor: "#333333", // Soft peach color
-                    color: "#ffffff", // Dark text for contrast
+                    backgroundColor: "#333333",
+                    color: "#ffffff",
                     marginRight: 1,
                     marginBottom: isSmallScreen ? 1 : 0,
-                    border: "1px solid #444444", // Slightly lighter border
+                    border: "1px solid #444444", 
                   }}
                 />
               </Box>
@@ -816,15 +806,15 @@ const MovieDetails = () => {
                       case "rotten tomatoes":
                       case "rottentomatoes":
                         color = "#fff";
-                        icon = "/rottentomato.png"; // Replace with actual Rotten Tomatoes icon URL
+                        icon = "/rottentomato.png"; 
                         break;
                       case "metacritic":
                         color = "#fff";
-                        icon = "/metacritic.png"; // Replace with actual Metacritic icon URL
+                        icon = "/metacritic.png"; 
                         break;
                       default:
                         color = "tomato";
-                        icon = "https://example.com/default-icon.png"; // Replace with a default icon URL if necessary
+                        icon = "https://example.com/default-icon.png"; 
                     }
 
                     return (
@@ -843,8 +833,8 @@ const MovieDetails = () => {
                             height: 20,
                             marginLeft: 4,
                             marginRight: 12,
-                            borderRadius: "50%", // Make the image circular
-                            objectFit: "cover", // Ensure the image covers the circle without distortion
+                            borderRadius: "50%", 
+                            objectFit: "cover", 
                           }}
                         />
                         <Typography
@@ -886,14 +876,13 @@ const MovieDetails = () => {
             }}
           >
             <Typography
-              variant="h4" // Changed to h4 for prominence
-              gutterBottom
-              color="white" // Set text color to white
+              variant="h4" 
+              color="white" 
               sx={{
                 textAlign: "left",
-                lineHeight: 1.5, // Adjusted for readability
+                lineHeight: 1.5, 
                 fontWeight: "bold",
-                mb: 1, // Margin bottom to separate the title from the content
+                mb: 1, 
               }}
             >
               Plot:
@@ -902,9 +891,9 @@ const MovieDetails = () => {
               variant="body1"
               color="white"
               sx={{
-                fontSize: "1rem", // Adjusted font size for readability
+                fontSize: "1rem", 
                 lineHeight: 1.4,
-                fontWeight: "100", // Lighter font weight for the plot text
+                fontWeight: "100", 
                 textAlign: "justify",
                 color: "#e5e5e5",
               }}
@@ -926,7 +915,7 @@ const MovieDetails = () => {
               color="white"
               sx={{
                 fontWeight: "bold",
-                mb: 1, // Margin bottom for spacing
+                mb: 1, 
                 textAlign: "left",
               }}
             >
@@ -940,11 +929,11 @@ const MovieDetails = () => {
                 fontSize: "1rem",
                 lineHeight: 1.4,
                 fontWeight: "100",
-                textAlign: "left", // Align text to the left
-                mb: 1, // Margin bottom for spacing
+                textAlign: "left", 
+                mb: 1, 
               }}
             >
-              <span style={{ fontWeight: "bold", color: "#e5e5e5" }}>
+              <span style={{  color: "#e5e5e5" }}>
                 Director:
               </span>{" "}
               {omdbMovie?.Director || "N/A"}
@@ -961,7 +950,7 @@ const MovieDetails = () => {
                 mb: 1, // Margin bottom for spacing
               }}
             >
-              <span style={{ fontWeight: "bold", color: "#e5e5e5" }}>
+              <span style={{  color: "#e5e5e5" }}>
                 Writer:
               </span>{" "}
               {omdbMovie?.Writer || "N/A"}
@@ -978,7 +967,7 @@ const MovieDetails = () => {
                 mb: 1, // Margin bottom for spacing
               }}
             >
-              <span style={{ fontWeight: "bold", color: "#e5e5e5" }}>
+              <span style={{  color: "#e5e5e5" }}>
                 Actors:
               </span>{" "}
               {omdbMovie?.Actors || "N/A"}
@@ -991,7 +980,7 @@ const MovieDetails = () => {
               padding: 2,
               borderRadius: 1,
               boxShadow: 1,
-              // backgroundColor: "#333", // Dark background for contrast
+             
             }}
           >
             <Typography
@@ -1033,13 +1022,13 @@ const MovieDetails = () => {
                     mb={2}
                   >
                     <Typography
-                      variant={isSmallScreen ? "h4" : "h6"} // Responsive font size
+                      variant={isSmallScreen ? "h4" : "h6"} 
                       sx={{
                         marginBottom: 1,
                         marginLeft:3,
-                        color: "#22cfff", // Set color to a vibrant shade
-                        fontWeight: "bold", // Make text bold
-                        animation: `${scaleAnimation} 3s infinite`, // Apply scaling animation
+                        color: "#22cfff",
+                        fontWeight: "bold",
+                        animation: `${scaleAnimation} 3s infinite`, 
                       }}
                     >
                       Streaming Platforms
@@ -1058,17 +1047,17 @@ const MovieDetails = () => {
                             key={index}
                             label={source.name}
                             variant="outlined"
-                            size={isSmallScreen ? "small" : "medium"} // Responsive chip size
+                            size={isSmallScreen ? "small" : "medium"} 
                             icon={getPlatformIcon(source.name)}
                             sx={{
                               cursor: "pointer",
                               margin: 1,
-                              // Add scaling animation
+                             
                               animation: `${scaleAnimation} 3s infinite`,
-                              // Responsive scaling
+                          
                               fontSize: isSmallScreen ? "0.8rem" : "1rem",
                               padding: isSmallScreen ? "4px 8px" : "8px 16px",
-                              // Styling from Box Office section
+                             
                               color: "#e5e5e5",
                               backgroundColor: "#121212",
                             }}

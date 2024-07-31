@@ -13,13 +13,13 @@ const RestPage = ({ friend }) => {
       sx={{
         flexGrow: 1,
         p: 2,
-        pt: 0, // Remove padding-top to eliminate extra space from the top
+        pt: 0, 
         backgroundColor: "#000000",
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center', // Ensure content is centered
-        // justifyContent:'center',
+        alignItems: 'center', 
+        
       }}
     >
       <Grid container spacing={3} sx={{ maxWidth: '100%', mt: 0 }}>

@@ -17,7 +17,7 @@ const FriendProfile = () => {
       component="main"
       sx={{
         flexGrow: 1,
-        p: 1,
+        p: 0,
         backgroundColor: "#000000",
         minHeight: '100vh',
         display: 'flex',

@@ -14,7 +14,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase/FirebaseConfig";
 import { useNavigate } from "react-router-dom";
-import MyButton from "../UI/MyButton"; // Import the MyButton component
+import MyButton from "../UI/MyButton"; 
 import MyButton2 from "../UI/MyButton2";
 import { styled } from '@mui/material/styles';
 import { useAuth } from "../contexts/AuthContext";
@@ -25,23 +25,23 @@ const CustomTextField = styled(TextField)(({ theme }) => ({
   },
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
-      borderColor: '#ccc', // Light border color
+      borderColor: '#ccc', 
     },
     '&:hover fieldset': {
-      borderColor: '#888', // Slightly darker border on hover
+      borderColor: '#888', 
     },
     '&.Mui-focused fieldset': {
-      borderColor: '#007bff', // Bright blue border when focused
+      borderColor: '#007bff', 
     },
   },
   '& .MuiInputLabel-root': {
-    color: '#666', // Modern label color
+    color: '#666', 
   },
   '& .MuiInputLabel-shrink': {
-    color: '#007bff', // Bright blue label when shrunk
+    color: '#007bff', 
   },
   '& .MuiFormHelperText-root': {
-    color: '#d9534f', // Error text color
+    color: '#d9534f', 
   },
 }));
 
@@ -54,11 +54,10 @@ const SignIn = () => {
   const navigate = useNavigate();
   const { logout } = useAuth();
 
-  // Check if user is already signed in on component mount
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        navigate("/"); // Redirect to home page if user is signed in
+        navigate("/");
       }
     });
 
@@ -71,7 +70,7 @@ const SignIn = () => {
     setError("");
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      navigate("/"); // Redirect to home page after successful sign-in
+      navigate("/"); 
     } catch (error) {
       setError(`CineConnect says: ${error.message.replace('Firebase: ', '')}`);
     } finally {
@@ -104,20 +103,20 @@ const SignIn = () => {
 
   const handleSignUp = async () => {
     try {
-      // Check if user is currently logged in and log them out
+    
       const user = auth.currentUser;
       if (user) {
-        await logout(); // Logout user if they are logged in
+        await logout(); 
       }
     } catch (error) {
       console.error("Error logging out:", error);
     } finally {
-      navigate("/signup"); // Navigate to the sign-up page
+      navigate("/signup"); 
     }
   };
 
   const handleGoBack = () => {
-    navigate(-1); // Navigate back to the previous page
+    navigate(-1); 
   };
 
   return (

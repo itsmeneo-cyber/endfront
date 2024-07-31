@@ -43,7 +43,7 @@ function App() {
             <Route path="/user/:userId" element={<UserList />} />
             <Route path="/chat/:id" element={<ChatWindow />} />          
             <Route path="/latestMovies" element={<LatestMovies />} />
-            <Route path="*" element={<NotFound />} /> {/* Handle all undefined routes */}
+            <Route path="*" element={<NotFound />} /> 
           </Routes>
         </AppBarDrawer>
       </Router>
