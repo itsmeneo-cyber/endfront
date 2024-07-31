@@ -19,6 +19,8 @@ import FriendProfile from "./components/FriendProfile";
 import UserList from "./components/UserList";
 import ChatWindow from "./components/ChatWindow";
 import LatestMovies from "./pages/LatestMovies";
+import NotFound from "./pages/NotFound";
+
 function App() {
   return (
     <AuthProvider>
@@ -40,7 +42,8 @@ function App() {
             <Route path="/profile/:userId" element={<ProtectedRoute element={FriendProfile} />} />
             <Route path="/user/:userId" element={<UserList />} />
             <Route path="/chat/:id" element={<ChatWindow />} />          
-            <Route path="/latestMovies" element ={<LatestMovies/>}/>
+            <Route path="/latestMovies" element={<LatestMovies />} />
+            <Route path="*" element={<NotFound />} /> {/* Handle all undefined routes */}
           </Routes>
         </AppBarDrawer>
       </Router>

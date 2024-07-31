@@ -44,6 +44,7 @@ const ChatWindow = () => {
   const { id } = useParams();
   const [displayName, setDisplayName] = useState("");
   const [photoURL, setPhotoURL] = useState("");
+  const [friendLocation,setFriendLocation]=useState("");
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [loadingMessages, setLoadingMessages] = useState(true);
@@ -59,6 +60,7 @@ const ChatWindow = () => {
         const friendInfo = await FetchFriendInfo(id);
         setDisplayName(friendInfo.displayName);
         setPhotoURL(friendInfo.photoURL);
+        setFriendLocation(friendInfo.location)
       } catch (error) {
         console.error("Error fetching friend data:", error);
       }
@@ -313,7 +315,7 @@ const ChatWindow = () => {
           <CheckCircleIcon style={{ color: '#007bff', fontSize: '20px', marginLeft: '8px' }} />
         </Typography>
         <Typography variant="body2" style={{ color: '#000000', fontFamily: 'Roboto' }}>
-          Lives in Delhi <LocationOnIcon fontSize="small" style={{ verticalAlign: 'middle', color: '#7cb518', marginLeft: '5px' }} />
+          Lives in {friendLocation} <LocationOnIcon fontSize="small" style={{ verticalAlign: 'middle', color: '#7cb518', marginLeft: '5px' }} />
         </Typography>
       </Box>
     </Box>
